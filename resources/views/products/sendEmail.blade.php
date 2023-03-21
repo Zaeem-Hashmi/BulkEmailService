@@ -43,28 +43,6 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label">Status </label>
-                                    <div class="col-sm-9">
-                                        <select class="form-control" name="status" required>
-                                            <option value="">Open</option>
-                                            <option value="">Close</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label">Closed By </label>
-                                    <div class="col-sm-9">
-                                        <select class="form-control" name="company_name" required>
-                                            <option value="">Comoany Name</option>
-                                            <option value="">Test</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">Request Number </label>
                                     <div class="col-sm-9">
                                         <input type="text" class="form-control" name="request_number">
@@ -76,14 +54,6 @@
                                     <label class="col-sm-3 col-form-label">Subject </label>
                                     <div class="col-sm-9">
                                         <input type="text" class="form-control" name="subject">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label">Created At </label>
-                                    <div class="col-sm-9">
-                                        <input type="date" class="form-control" name="created_date">
                                     </div>
                                 </div>
                             </div>
