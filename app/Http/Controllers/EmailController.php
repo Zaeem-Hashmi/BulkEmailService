@@ -60,31 +60,39 @@ class EmailController extends Controller
     }
     public function sendEmail(Request $request)
     {
-        $creds = EmialConfig::latest()->first();
-        $config = array(
-            'driver'     => $creds->driver,
-            'host'       => $creds->host,
-            'port'       => $creds->port,
-            'encryption' => $creds->encryption,
-            'username'   => $creds->username,
-            'password'   => $creds->password,
-            'sendmail'   => '/usr/sbin/sendmail -bs',
-            'pretend'    => false,
-        );
-        Config::set('mail', $config);
-        $mailList = Email::where('list_id', '=', $request->list)->get();
-        foreach ($mailList as $mail) {
-            $data = ['name'=>$mail->name];
-            $user['to'] = $mail->email;
-            $user['sub'] = $request->subject;
-            $user['html'] = $request->content;
-            Mail::send([],$data,function($message) use ($user){
-                $message->to($user['to']);
-                $message->subject($user['sub']);
-                $message->setBody($user['html'], 'text/html');
-            });
+        // $creds = EmialConfig::latest()->first();
+        // $config = array(
+        //     'host'       => $creds->host,
+        //     'port'       => $creds->port,
+        //     'encryption' => $creds->encryption,
+        //     'username'   => $creds->username,
+        //     'password'   => $creds->password,
+        //     'pretend'    => false,
+        // );
+        // Config::set('mail', $config);
+        // $mailList = Email::where('list_id', '=', $request->list)->get();
+        // foreach ($mailList as $mail) {
+        //     $data = ['name'=>$mail->name];
+        //     $user['to'] = $mail->email;
+        //     $user['sub'] = $request->subject;
+        //     $user['html'] = $request->content;
+        //     Mail::send([],$data,function($message) use ($user){
+        //         $message->to($user['to']);
+        //         $message->subject($user['sub']);
+        //         $message->setBody($user['html'], 'text/html');
+        //     });
+        // }
+        // return $request;
+        $mails = Email::where('list_id','=',$request->list)->get();
+        foreach($mails as $mail){
+            $details = [
+                'title' => $mail->name,
+                'body' => $request->content
+            ];
+            Mail::to($mail)->send(new \App\Mail\MyTestMail($details));
         }
-        return Redirect()->back()->with('alert-success','Mail Sent Successfully');
+       
+        return Redirect()->back()->with('alert-success','mail sent');
     }
     public function settings()
     {
