@@ -9,6 +9,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class EmailController extends Controller
@@ -60,36 +61,18 @@ class EmailController extends Controller
     }
     public function sendEmail(Request $request)
     {
-        // $creds = EmialConfig::latest()->first();
-        // $config = array(
-        //     'host'       => $creds->host,
-        //     'port'       => $creds->port,
-        //     'encryption' => $creds->encryption,
-        //     'username'   => $creds->username,
-        //     'password'   => $creds->password,
-        //     'pretend'    => false,
-        // );
-        // Config::set('mail', $config);
-        // $mailList = Email::where('list_id', '=', $request->list)->get();
-        // foreach ($mailList as $mail) {
-        //     $data = ['name'=>$mail->name];
-        //     $user['to'] = $mail->email;
-        //     $user['sub'] = $request->subject;
-        //     $user['html'] = $request->content;
-        //     Mail::send([],$data,function($message) use ($user){
-        //         $message->to($user['to']);
-        //         $message->subject($user['sub']);
-        //         $message->setBody($user['html'], 'text/html');
-        //     });
-        // }
-        // return $request;
-        $mails = Email::where('list_id','=',$request->list)->get();
-        foreach($mails as $mail){
-            $details = [
-                'title' => $mail->name,
-                'body' => $request->content
-            ];
-            Mail::to($mail)->send(new \App\Mail\MyTestMail($details));
+        try {
+            $mails = Email::where('list_id','=',$request->list)->get();
+            foreach($mails as $mail){
+                $details = [
+                    'title' => $mail->name,
+                    'body' => $request->content
+                ];
+                Mail::to($mail)->send(new \App\Mail\MyTestMail($details));
+            }
+        } catch (\Exception $e) {
+            Log::error(__FUNCTION__ . "->" . __CLASS__ . " | Execution: " . $e->getMessage());
+            return redirect()->back()->with('message', $e->getMessage());
         }
        
         return Redirect()->back()->with('alert-success','mail sent');

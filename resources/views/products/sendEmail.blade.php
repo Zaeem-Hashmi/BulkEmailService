@@ -13,8 +13,12 @@
 @section('help-center-question-active')
     active
 @endsection
-
 @section('content')
+@if(session()->has('message'))
+<div class="alert alert-warning">
+    {{ session()->get('message') }}
+</div>
+@endif
     <div class="row">
         <div class="col-md-12 grid-margin stretch-card">
             <div class="card position-relative">
