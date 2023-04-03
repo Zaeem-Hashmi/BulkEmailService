@@ -1,0 +1,47 @@
+version: '3.7'
+services:
+  app:
+    container_name: email-service
+    build:
+      context: .
+      dockerfile: development/app.dockerfile
+    volumes:
+      - ./:/var/www
+    env_file: .env.example
+    environment:
+      - “DB_HOST=database”
+      - “DB_PASSWORD=root
+      - "APP_KEY=base64:SK61UgfDhZPE/6Ux3nWd/LErzMWO50BNHcWvrQv8RGE="
+    networks:
+      - emailnetwork
+  web:
+    image: nginx:alpine
+    container_name: web-server
+    restart: unless-stopped
+    ports:
+        - "8080:80"
+    volumes:
+        - ./:/var/www
+        - ./development/nginx:/etc/nginx/conf.d/
+    networks:
+        - emailnetwork
+  database:
+    container_name: mysql_database
+    image: mysql
+    volumes:
+      - ./dbdata:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 8991:3306
+    networks:
+      - emailnetwork 
+
+volumes:
+    dbdata:
+
+networks:
+    emailnetwork:
+        driver: bridge
+ 
+
