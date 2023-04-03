@@ -32,6 +32,7 @@ services:
       - ./dbdata:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel
     ports:
       - 8991:3306
     networks:
@@ -43,5 +44,3 @@ volumes:
 networks:
     emailnetwork:
         driver: bridge
- 
-
